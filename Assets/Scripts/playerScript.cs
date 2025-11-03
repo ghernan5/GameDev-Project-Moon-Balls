@@ -1,19 +1,13 @@
-
-using System;
 using System.Collections;
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class playerScript : MonoBehaviour
 {
-
-    // Sprint 1 Goal: Make basic movement and find best attacking method (game feel) 
-    // make the sword rotate the direction the player is moving
     public float speed;
-    public GameObject sword; //modular sword system for enemies(?)
-
-    private Boolean isSwinging;
+    public GameObject sword;
+    [SerializeField] private float swingSpeed = 10f;
+    private bool isSwinging = false;
     private Quaternion startingSwordRotation;
     private Vector3 startingSwordPosition;
     private Vector2 movement;
@@ -23,32 +17,24 @@ public class playerScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sword.SetActive(false);
-
     }
+
 
     void FixedUpdate()
     {
-        if (isSwinging)
+        //rotation code
+        if (movement.sqrMagnitude > 0.001f)
         {
-            sword.transform.RotateAround(transform.localPosition, Vector3.forward, 10f);
-            Debug.Log(sword.transform.rotation.z);
-            if (sword.transform.rotation.z > 0.75f)
-            {
-                isSwinging = false;
-                sword.SetActive(false);
-                sword.transform.localRotation = startingSwordRotation;
-                sword.transform.localPosition = startingSwordPosition;
-            }
-        } else
-        {
-            //rotate sword where player is facing
+            float targetAngle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg - 90f;
+            Quaternion targetRotation = Quaternion.Euler(0f, 0f, targetAngle);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 0.50f);
         }
     }
 
     void OnMove(InputValue value)
     {
-            movement = value.Get<Vector2>();
-            rb.linearVelocity = movement * speed;
+        movement = value.Get<Vector2>();
+        rb.linearVelocity = movement * speed;
     }
 
     void OnSwing()
@@ -57,10 +43,34 @@ public class playerScript : MonoBehaviour
         {
             startingSwordRotation = sword.transform.localRotation;
             startingSwordPosition = sword.transform.localPosition;
-            Debug.Log("player swings!");
             isSwinging = true;
             sword.SetActive(true);
+            StartCoroutine(SwingAttack(90f)); //swinging sword by 90 degrees, can change it 
         }
+    }
+
+    private IEnumerator SwingAttack(float targetAngle)
+    {
+        isSwinging = true;
+        float rotated = 0f;
+        
+        while (rotated < targetAngle)
+        {
+            float step = swingSpeed * Time.deltaTime;
+
+            if (rotated + step > targetAngle)
+            {
+                step = targetAngle - rotated;
+            }
+            rotated += swingSpeed;
+            sword.transform.RotateAround(transform.localPosition, Vector3.forward, swingSpeed);
+            yield return null;
+        }
+
+        sword.SetActive(false);
+        sword.transform.localRotation = startingSwordRotation;
+        sword.transform.localPosition = startingSwordPosition;
+        isSwinging = false;
     }
     
 }
