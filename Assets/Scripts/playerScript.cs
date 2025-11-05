@@ -17,7 +17,7 @@ public class playerScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        sword.SetActive(false);
+        // sword.SetActive(false);
     }
 
     void FixedUpdate()
