@@ -7,6 +7,7 @@ public class playerScript : MonoBehaviour
     public float speed;
     public GameObject sword;
     [SerializeField] private float swingSpeed = 10f; //angular speed
+    [SerializeField] private float swingAngle = 90f; //angle to swing
     private bool isSwinging = false;
     private bool facingRight = true;
     private Quaternion startingSwordRotation;
@@ -17,7 +18,7 @@ public class playerScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        // sword.SetActive(false);
+        sword.SetActive(false);
     }
 
     void FixedUpdate()
@@ -46,17 +47,17 @@ public class playerScript : MonoBehaviour
             startingSwordPosition = sword.transform.localPosition;
             isSwinging = true;
             sword.SetActive(true);
-            StartCoroutine(SwingAttack(90f)); //this can be changed
+            StartCoroutine(SwingAttack()); //this can be changed
         }
     }
 
-    private IEnumerator SwingAttack(float targetAngle)
+    private IEnumerator SwingAttack()
     {
         isSwinging = true;
         float rotated = 0f;
         float swingDirection = facingRight ? 1f : -1f;
 
-        while (rotated < targetAngle)
+        while (rotated < swingAngle)
         {
             sword.transform.RotateAround(transform.localPosition, Vector3.forward, -swingSpeed * swingDirection);
             rotated += swingSpeed;
@@ -74,4 +75,6 @@ public class playerScript : MonoBehaviour
         facingRight = !facingRight;
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
     }
+
+    
 }
