@@ -22,12 +22,12 @@ public class playerScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        //rotation code
+        // player rotation (maybe take out fixedupdate)
         if (movement.sqrMagnitude > 0.001f)
         {
             float targetAngle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg - 90f;
             Quaternion targetRotation = Quaternion.Euler(0f, 0f, targetAngle);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 0.50f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 0.25f);
         }
     }
 
@@ -53,17 +53,11 @@ public class playerScript : MonoBehaviour
     {
         isSwinging = true;
         float rotated = 0f;
-        
+
         while (rotated < targetAngle)
         {
-            float step = swingSpeed * Time.deltaTime;
-
-            if (rotated + step > targetAngle)
-            {
-                step = targetAngle - rotated;
-            }
-            rotated += swingSpeed;
             sword.transform.RotateAround(transform.localPosition, Vector3.forward, swingSpeed);
+            rotated += 5;
             yield return null;
         }
 
