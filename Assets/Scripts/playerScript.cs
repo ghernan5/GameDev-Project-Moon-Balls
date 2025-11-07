@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class playerScript : MonoBehaviour
 {
@@ -67,6 +68,11 @@ public class playerScript : MonoBehaviour
         sword.transform.localRotation = startingSwordRotation;
         sword.transform.localPosition = startingSwordPosition;
         isSwinging = false;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {//TODO: fix
+        if (collision.collider.name.Contains("enemy")&&!isSwinging) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void Flip()
