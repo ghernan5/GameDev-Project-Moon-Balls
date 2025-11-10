@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class playerScript : MonoBehaviour
 {
     public float speed;
+    int health = 3;
     public GameObject sword;
     [SerializeField] private float swingSpeed = 10f; //angular speed
     [SerializeField] private float swingAngle = 90f; //angle to swing
@@ -72,8 +73,20 @@ public class playerScript : MonoBehaviour
     }
 
     void OnCollisionEnter2D(Collision2D collision)
-    {//TODO: fix
-        if (collision.collider.name.Contains("enemy")&&!isSwinging) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    {
+        if (collision.collider.name.Contains("enemy") && !isSwinging)
+        {
+            if (health <= 0)
+            {
+                print("YOU DIED");
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            else
+            {
+                print(health);
+                health -= 1;
+            }
+        }
     }
 
     private void Flip()
