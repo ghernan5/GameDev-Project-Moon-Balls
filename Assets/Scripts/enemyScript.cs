@@ -5,7 +5,7 @@ public class enemyScript : MonoBehaviour
     private Vector2 target;
     private Rigidbody2D rb;
     private float movement;
-    public bool facingRight = true;
+    bool facingRight = true;
     [SerializeField]
     float speed;
     float damage;
@@ -20,11 +20,10 @@ public class enemyScript : MonoBehaviour
     void FixedUpdate()
     {
         target = FindFirstObjectByType<playerScript>().transform.position;
-        transform.position = Vector2.MoveTowards(transform.position, target, speed);
+        Vector2 direction = (target - rb.position).normalized;
+        rb.linearVelocity = direction * speed;
 
-        movement = target.x-transform.position.x;
-        if (movement > 0 && !facingRight) Flip();
-        else if (movement < 0 && facingRight) Flip();
+        if ((rb.linearVelocityX > 0 && !facingRight) || (rb.linearVelocityX < 0 && facingRight)) Flip();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
