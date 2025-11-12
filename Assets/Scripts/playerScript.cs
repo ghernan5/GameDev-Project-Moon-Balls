@@ -6,10 +6,14 @@ using UnityEngine.SceneManagement;
 public class playerScript : MonoBehaviour
 {
     public float speed;
+    int health = 3;
     public GameObject sword;
     [SerializeField] private float swingSpeed = 10f; //angular speed
+    [SerializeField] private float swingAngle = 90f; //angle to swing
     private bool isSwinging = false;
     private bool facingRight = true;
+    private SpriteRenderer spriteRenderer;
+
     private Quaternion startingSwordRotation;
     private Vector3 startingSwordPosition;
     private Vector2 movement;
@@ -17,8 +21,10 @@ public class playerScript : MonoBehaviour
 
     void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
-        // sword.SetActive(false);
+
+        sword.SetActive(false);
     }
 
     void FixedUpdate()
@@ -47,17 +53,17 @@ public class playerScript : MonoBehaviour
             startingSwordPosition = sword.transform.localPosition;
             isSwinging = true;
             sword.SetActive(true);
-            StartCoroutine(SwingAttack(90f)); //this can be changed
+            StartCoroutine(SwingAttack()); //this can be changed
         }
     }
 
-    private IEnumerator SwingAttack(float targetAngle)
+    private IEnumerator SwingAttack()
     {
         isSwinging = true;
         float rotated = 0f;
         float swingDirection = facingRight ? 1f : -1f;
 
-        while (rotated < targetAngle)
+        while (rotated < swingAngle)
         {
             sword.transform.RotateAround(transform.localPosition, Vector3.forward, -swingSpeed * swingDirection);
             rotated += swingSpeed;
@@ -71,8 +77,24 @@ public class playerScript : MonoBehaviour
     }
 
     void OnCollisionEnter2D(Collision2D collision)
-    {//TODO: fix
-        if (collision.collider.name.Contains("enemy")&&!isSwinging) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    {
+        if (collision.collider.name.Contains("enemy") && !isSwinging)
+        {
+            if (health <= 0)
+            {
+                print("YOU DIED");
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            else
+            {
+                print(health);
+                health -= 1;
+                // push the player away from enemy / object when hit but not dead
+                Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
+                StartCoroutine(Knockback(knockbackDirection, 10f, 0.3f));
+                StartCoroutine(FlashRed());
+            }
+        }
     }
 
     private void Flip()
@@ -80,4 +102,32 @@ public class playerScript : MonoBehaviour
         facingRight = !facingRight;
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
     }
+
+    IEnumerator Knockback(Vector2 direction, float force, float duration)
+    {
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForce(direction * force, ForceMode2D.Impulse);
+        //canMove = false;
+
+        float timer = 0f;
+        while (timer < duration)
+        {
+            rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, Vector2.zero, Time.deltaTime * 5f);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        rb.linearVelocity = Vector2.zero;
+        //canMove = true;
+    }
+
+    IEnumerator FlashRed()
+    {
+        Color originalColor = spriteRenderer.color;
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = originalColor;
+    }
+
+
 }

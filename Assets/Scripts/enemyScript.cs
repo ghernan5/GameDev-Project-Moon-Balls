@@ -7,20 +7,21 @@ public class enemyScript : MonoBehaviour
     private Rigidbody2D rb;
     private float movement;
     public bool facingRight = true;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] float speed;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         target = FindFirstObjectByType<playerScript>().transform.position;
-        transform.position = Vector2.MoveTowards(transform.position, target, .075f);
-        movement = target.x-transform.position.x;
-        if (movement > 0.01 && !facingRight) Flip();
-        else if (movement < 0.01 && facingRight) Flip();
+        transform.position = Vector2.MoveTowards(transform.position, target, speed);
+
+        movement = rb.linearVelocityX;
+        if (movement > 0 && !facingRight) Flip();
+        else if (movement < 0 && facingRight) Flip();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
