@@ -1,4 +1,3 @@
-using Mono.Cecil.Cil;
 using UnityEngine;
 
 public class enemyScript : MonoBehaviour
@@ -7,10 +6,14 @@ public class enemyScript : MonoBehaviour
     private Rigidbody2D rb;
     private float movement;
     public bool facingRight = true;
-    [SerializeField] float speed;
+    [SerializeField]
+    float speed;
+    float damage;
 
     void Start()
     {
+        damage = damage == 0 ? 1f : damage;
+        speed = speed == 0 ? 0.075f : speed;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -19,7 +22,7 @@ public class enemyScript : MonoBehaviour
         target = FindFirstObjectByType<playerScript>().transform.position;
         transform.position = Vector2.MoveTowards(transform.position, target, speed);
 
-        movement = rb.linearVelocityX;
+        movement = target.x-transform.position.x;
         if (movement > 0 && !facingRight) Flip();
         else if (movement < 0 && facingRight) Flip();
     }
