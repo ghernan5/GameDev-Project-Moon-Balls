@@ -17,6 +17,8 @@ public class playerScript : MonoBehaviour
     private Quaternion startingSwordRotation;
     private Vector3 startingSwordPosition;
     private Vector2 movement;
+    float rotated = 0f;
+    float swingDirection;
     Rigidbody2D rb;
 
     void Start()
@@ -29,17 +31,31 @@ public class playerScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isSwinging)
+        {
+            //stop player from moving while hit
+            movement = Vector2.zero;
+            swingDirection = facingRight ? 1f : -1f;
+            if(rotated < swingAngle)
+            {
+                sword.transform.RotateAround(transform.localPosition, Vector3.forward, -swingSpeed * swingDirection);
+                rotated += swingSpeed;
+            } else
+            {
+                sword.SetActive(false);
+                sword.transform.localRotation = startingSwordRotation;
+                sword.transform.localPosition = startingSwordPosition;
+                isSwinging = false;
+                rotated = 0f;
+            }
+        }
     }
 
     void OnMove(InputValue value)
     {
         movement = value.Get<Vector2>();
         rb.linearVelocity = movement * speed;
-            if (movement.x > 0 && !facingRight)
-        {
-            Flip();
-        }
-        else if (movement.x < 0 && facingRight)
+            if ((movement.x > 0 && !facingRight) || (movement.x < 0 && facingRight))
         {
             Flip();
         }
@@ -53,33 +69,15 @@ public class playerScript : MonoBehaviour
             startingSwordPosition = sword.transform.localPosition;
             isSwinging = true;
             sword.SetActive(true);
-            StartCoroutine(SwingAttack()); //this can be changed
         }
-    }
-
-    private IEnumerator SwingAttack()
-    {
-        isSwinging = true;
-        float rotated = 0f;
-        float swingDirection = facingRight ? 1f : -1f;
-
-        while (rotated < swingAngle)
-        {
-            sword.transform.RotateAround(transform.localPosition, Vector3.forward, -swingSpeed * swingDirection);
-            rotated += swingSpeed;
-            yield return null;
-        }
-
-        sword.SetActive(false);
-        sword.transform.localRotation = startingSwordRotation;
-        sword.transform.localPosition = startingSwordPosition;
-        isSwinging = false;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        //maybe add strength parameter to enemies to get that here (Morgan doing this)
         if (collision.collider.name.Contains("enemy") && !isSwinging)
         {
+            health -= 1;
             if (health <= 0)
             {
                 print("YOU DIED");
@@ -88,8 +86,6 @@ public class playerScript : MonoBehaviour
             else
             {
                 print(health);
-                health -= 1;
-                // push the player away from enemy / object when hit but not dead
                 Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
                 StartCoroutine(Knockback(knockbackDirection, 10f, 0.3f));
                 StartCoroutine(FlashRed());
@@ -107,7 +103,6 @@ public class playerScript : MonoBehaviour
     {
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(direction * force, ForceMode2D.Impulse);
-        //canMove = false;
 
         float timer = 0f;
         while (timer < duration)
@@ -116,15 +111,13 @@ public class playerScript : MonoBehaviour
             timer += Time.deltaTime;
             yield return null;
         }
-
         rb.linearVelocity = Vector2.zero;
-        //canMove = true;
     }
 
     IEnumerator FlashRed()
     {
         Color originalColor = spriteRenderer.color;
-        spriteRenderer.color = Color.red;
+        spriteRenderer.color = new Color(0f, -0.5f, -0.5f) + originalColor;
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = originalColor;
     }
