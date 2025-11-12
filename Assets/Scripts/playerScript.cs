@@ -8,8 +8,8 @@ public class playerScript : MonoBehaviour
     public float speed;
     int health = 3;
     public GameObject sword;
-    [SerializeField] private float swingSpeed = 10f; //angular speed
-    [SerializeField] private float swingAngle = 90f; //angle to swing
+    [SerializeField] private float swingSpeed = 10f;
+    [SerializeField] private float swingAngle = 90f;
     private bool isSwinging = false;
     private bool facingRight = true;
     private SpriteRenderer spriteRenderer;
