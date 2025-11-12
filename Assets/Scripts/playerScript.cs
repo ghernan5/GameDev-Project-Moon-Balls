@@ -12,6 +12,8 @@ public class playerScript : MonoBehaviour
     [SerializeField] private float swingAngle = 90f; //angle to swing
     private bool isSwinging = false;
     private bool facingRight = true;
+    private SpriteRenderer spriteRenderer;
+
     private Quaternion startingSwordRotation;
     private Vector3 startingSwordPosition;
     private Vector2 movement;
@@ -19,7 +21,9 @@ public class playerScript : MonoBehaviour
 
     void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+
         sword.SetActive(false);
     }
 
@@ -85,6 +89,10 @@ public class playerScript : MonoBehaviour
             {
                 print(health);
                 health -= 1;
+                // push the player away from enemy / object when hit but not dead
+                Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
+                StartCoroutine(Knockback(knockbackDirection, 10f, 0.3f));
+                StartCoroutine(FlashRed());
             }
         }
     }
@@ -95,5 +103,31 @@ public class playerScript : MonoBehaviour
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
     }
 
-    
+    IEnumerator Knockback(Vector2 direction, float force, float duration)
+    {
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForce(direction * force, ForceMode2D.Impulse);
+        //canMove = false;
+
+        float timer = 0f;
+        while (timer < duration)
+        {
+            rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, Vector2.zero, Time.deltaTime * 5f);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        rb.linearVelocity = Vector2.zero;
+        //canMove = true;
+    }
+
+    IEnumerator FlashRed()
+    {
+        Color originalColor = spriteRenderer.color;
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = originalColor;
+    }
+
+
 }
