@@ -19,9 +19,8 @@ public class enemyScript : MonoBehaviour
         target = FindFirstObjectByType<playerScript>().transform.position;
         transform.position = Vector2.MoveTowards(transform.position, target, .075f);
         movement = target.x-transform.position.x;
-        //Debug.Log(movement == 0);
-        if (movement > 0 && !facingRight) Flip();
-        else if (movement < 0 && facingRight) Flip();
+        if (movement > 0.01 && !facingRight) Flip();
+        else if (movement < 0.01 && facingRight) Flip();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
