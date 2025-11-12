@@ -1,5 +1,3 @@
-using Mono.Cecil.Cil;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class enemyScript : MonoBehaviour
@@ -8,10 +6,14 @@ public class enemyScript : MonoBehaviour
     private Rigidbody2D rb;
     private float movement;
     bool facingRight = true;
-    [SerializeField] float speed;
+    [SerializeField]
+    float speed;
+    float damage;
 
     void Start()
     {
+        damage = damage == 0 ? 1f : damage;
+        speed = speed == 0 ? 0.075f : speed;
         rb = GetComponent<Rigidbody2D>();
     }
 
