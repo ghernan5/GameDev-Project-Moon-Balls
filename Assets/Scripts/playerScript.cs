@@ -79,7 +79,7 @@ public class playerScript : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         //maybe add strength parameter to enemies to get that here (Morgan doing this)
-        if (collision.collider.name.Contains("enemy") && !isSwinging)
+        if (collision.collider.name.Contains("enemy"))
         {
             health -= 1;
             if (health <= 0)
