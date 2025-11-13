@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class playerScript : MonoBehaviour
 {
     public float speed;
-    int health = 3;
+    [SerializeField] int health = 3;
     public GameObject sword;
     [SerializeField] private float swingSpeed = 10f;
     [SerializeField] private float swingAngle = 90f;
@@ -14,13 +14,12 @@ public class playerScript : MonoBehaviour
     private bool facingRight = true;
     private bool canMove = true;
     private SpriteRenderer spriteRenderer;
-
+    Rigidbody2D rb;
     private Quaternion startingSwordRotation;
     private Vector3 startingSwordPosition;
     private Vector2 movement;
     float rotated = 0f;
     float swingDirection;
-    Rigidbody2D rb;
 
     void Start()
     {
