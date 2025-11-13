@@ -12,6 +12,7 @@ public class playerScript : MonoBehaviour
     [SerializeField] private float swingAngle = 90f;
     private bool isSwinging = false;
     private bool facingRight = true;
+    private bool canMove = true;
     private SpriteRenderer spriteRenderer;
 
     private Quaternion startingSwordRotation;
@@ -53,11 +54,14 @@ public class playerScript : MonoBehaviour
 
     void OnMove(InputValue value)
     {
-        movement = value.Get<Vector2>();
-        rb.linearVelocity = movement * speed;
-            if ((movement.x > 0 && !facingRight) || (movement.x < 0 && facingRight))
+        if (canMove)
         {
-            Flip();
+            movement = value.Get<Vector2>();
+            rb.linearVelocity = movement * speed;
+            if ((movement.x > 0 && !facingRight) || (movement.x < 0 && facingRight))
+            {
+                Flip();
+            }
         }
     }
 
@@ -75,7 +79,7 @@ public class playerScript : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         //maybe add strength parameter to enemies to get that here (Morgan doing this)
-        if (collision.collider.name.Contains("enemy") && !isSwinging)
+        if (collision.collider.name.Contains("enemy"))
         {
             health -= 1;
             if (health <= 0)
@@ -101,6 +105,7 @@ public class playerScript : MonoBehaviour
 
     IEnumerator Knockback(Vector2 direction, float force, float duration)
     {
+        canMove = false;
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(direction * force, ForceMode2D.Impulse);
 
@@ -112,6 +117,7 @@ public class playerScript : MonoBehaviour
             yield return null;
         }
         rb.linearVelocity = Vector2.zero;
+        canMove = true;
     }
 
     IEnumerator FlashRed()
