@@ -44,7 +44,7 @@ public class enemyScript : MonoBehaviour
             else
             {
                 Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
-                StartCoroutine(Knockback(knockbackDirection, 50f, 0.3f));
+                StartCoroutine(Knockback(knockbackDirection, 20f, 0.3f));
                 StartCoroutine(FlashRed());
             }
         }
