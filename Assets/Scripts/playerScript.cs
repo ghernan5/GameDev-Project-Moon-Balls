@@ -94,6 +94,14 @@ public class playerScript : MonoBehaviour
                 StartCoroutine(FlashRed());
             }
         }
+        else if (collision.collider.name == "powerup") // change this to a tag, build if statements for names
+        {
+            Debug.Log("Player got a powerup!");
+            Destroy(collision.collider.gameObject);
+            StartCoroutine(SpeedPowerUp(5f));
+            //emulating getting a speed powerup
+            
+        }
     }
 
     private void Flip()
@@ -125,6 +133,22 @@ public class playerScript : MonoBehaviour
         spriteRenderer.color = new Color(0f, -0.5f, -0.5f) + originalColor;
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = originalColor;
+    }
+
+    IEnumerator SpeedPowerUp(float duration)
+    {
+        Debug.Log("speedup power started");
+        swingSpeed += 5f;
+        speed += 5f;
+        float timer = 0f;
+        while(timer < duration)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        speed -= 5f;
+        swingSpeed -= 5f;
+        Debug.Log("speedup ended!");
     }
 
 
