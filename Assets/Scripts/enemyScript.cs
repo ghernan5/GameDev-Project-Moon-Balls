@@ -36,16 +36,17 @@ public class enemyScript : MonoBehaviour
     {
         if (collision.collider.name == "sword")
         {
+            Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1; // maybe take in a damage parameter
+            StartCoroutine(FlashRed());
             if(health <= 0)
             {
-                Destroy(gameObject);
+                StartCoroutine(Knockback(knockbackDirection, 20f, 0.2f));
+                StartCoroutine(Die());
             }
             else
             {
-                Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
                 StartCoroutine(Knockback(knockbackDirection, 20f, 0.3f));
-                StartCoroutine(FlashRed());
             }
         }
     }
@@ -79,5 +80,15 @@ public class enemyScript : MonoBehaviour
         spriteRenderer.color = new Color(0f, -0.5f, -0.5f) + originalColor;
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = originalColor;
+    }
+
+    IEnumerator Die()
+    {
+        Debug.Log("Dying");
+        Quaternion rotate = transform.rotation;
+        rotate.z = 90f;
+        transform.rotation = rotate;
+        yield return new WaitForSeconds(0.2f);
+        Destroy(gameObject);
     }
 }

@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - powerup
+  - GrowUp
+  - SpeedUp
   layers:
   - Default
   - TransparentFX
@@ -12,7 +13,7 @@ TagManager:
   - Player
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 

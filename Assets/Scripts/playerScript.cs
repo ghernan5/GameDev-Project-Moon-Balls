@@ -94,13 +94,17 @@ public class playerScript : MonoBehaviour
                 StartCoroutine(FlashRed());
             }
         }
-        else if (collision.collider.name == "powerup") // change this to a tag, build if statements for names
+        if (collision.collider.CompareTag("SpeedUp")) // change this to a tag, build if statements for names
         {
-            Debug.Log("Player got a powerup!");
             Destroy(collision.collider.gameObject);
-            StartCoroutine(SpeedPowerUp(5f));
-            //emulating getting a speed powerup
-            
+            Debug.Log("Player got a speedup!");
+            StartCoroutine(SpeedPowerUp(3f));
+        }
+        if (collision.collider.CompareTag("GrowUp"))
+        {
+            Destroy(collision.collider.gameObject);
+            Debug.Log("Player got a grower!");
+            StartCoroutine(GrowPowerUp(3f));
         }
     }
 
@@ -137,7 +141,6 @@ public class playerScript : MonoBehaviour
 
     IEnumerator SpeedPowerUp(float duration)
     {
-        Debug.Log("speedup power started");
         swingSpeed += 5f;
         speed += 5f;
         float timer = 0f;
@@ -148,7 +151,22 @@ public class playerScript : MonoBehaviour
         }
         speed -= 5f;
         swingSpeed -= 5f;
-        Debug.Log("speedup ended!");
+    }
+
+    //This does not work properly, fix this now
+    IEnumerator GrowPowerUp(float duration)
+    {
+        Vector3 scale = sword.transform.localScale;
+        scale.y += 1f;
+        sword.transform.localScale = scale;
+        float timer = 0f;
+        while(timer < duration)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        scale.y -= 1f;
+        sword.transform.localScale = scale;
     }
 
 
