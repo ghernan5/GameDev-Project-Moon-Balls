@@ -156,17 +156,9 @@ public class playerScript : MonoBehaviour
     //This does not work properly, fix this now
     IEnumerator GrowPowerUp(float duration)
     {
-        Vector3 scale = sword.transform.localScale;
-        scale.y += 1f;
-        sword.transform.localScale = scale;
-        float timer = 0f;
-        while(timer < duration)
-        {
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        scale.y -= 1f;
-        sword.transform.localScale = scale;
+        sword.transform.localScale += new Vector3(0f, 1f, 0f);
+        yield return new WaitForSeconds(duration);
+        sword.transform.localScale -= new Vector3(0f, 1f, 0f);
     }
 
 
