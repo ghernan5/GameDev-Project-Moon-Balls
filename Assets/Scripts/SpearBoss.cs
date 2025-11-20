@@ -11,39 +11,37 @@ public class SpearBoss : MonoBehaviour
     private bool facingRight = true;
     private bool canMove = true;
     private bool attacking = false;
+    private bool exhausted = false;
     [SerializeField] float speed;
-    [SerializeField] float tornadoSpeed;
     [SerializeField] float damage;
     [SerializeField] int health;
+
 
     void Start()
     {
         damage = damage == 0 ? 1f : damage;
         speed = speed == 0 ? 0.075f : speed;
         health = health == 0 ? 1 : health;
-        tornadoSpeed = tornadoSpeed == 0 ? 5 : tornadoSpeed;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void FixedUpdate()
     {
-        if (canMove && !attacking)
+        if (canMove && !attacking && !exhausted)
         {
             target = FindFirstObjectByType<playerScript>().transform.position;
             Vector2 direction;
             //
-            if(Vector3.Distance(transform.position, target) > 6f)
+            if(Vector3.Distance(transform.position, target) > 4f)
             {
                 direction = (target - rb.position).normalized;
                 Debug.Log("Direction: " + direction);
             }
             else
             {
-                //get direction for spear
+                //get direction for spear and attack
                 direction = (target - rb.position).normalized;
-                //start attack
-
                 StartCoroutine(ThrustAttack(direction));
                 direction = Vector3.zero; // may not need this
             }
@@ -54,7 +52,7 @@ public class SpearBoss : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.name == "sword" && !attacking)
+        if (collision.collider.name == "sword" && (!attacking || exhausted)) // test this OR
         {
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1; // maybe take in a damage parameter
@@ -119,14 +117,26 @@ public class SpearBoss : MonoBehaviour
         attacking = true;
         //snap spear to face player
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        spear.transform.localRotation = Quaternion.Euler(0f, 0f, angle - 90f);
-        Debug.Log("angle: " + angle);
-
+        if (!facingRight)
+            angle = 180f - angle;
+        spear.transform.localRotation = Quaternion.Euler(0, 0, angle - 90f);
+        yield return new WaitForSeconds(0.5f); // giving player time to react
         //charge logic here
         speed += 5f;
         rb.linearVelocity = direction * speed;
-        yield return new WaitForSeconds(2f); //balance
+        yield return new WaitForSeconds(1f); //length of charge
         speed -= 5f;
         attacking = false;
+        StartCoroutine(Cooldown());
+    }
+
+    IEnumerator Cooldown()
+    {
+        exhausted = true;
+        rb.linearVelocity = Vector2.zero;
+        Debug.Log("Cooling Down!");
+        yield return new WaitForSeconds(3f);
+        exhausted = false;
+        spear.transform.localRotation = Quaternion.Euler(0,0,0);
     }
 }

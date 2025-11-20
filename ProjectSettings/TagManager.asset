@@ -6,6 +6,8 @@ TagManager:
   tags:
   - GrowUp
   - SpeedUp
+  - Enemy
+  - Boss
   layers:
   - Default
   - TransparentFX
