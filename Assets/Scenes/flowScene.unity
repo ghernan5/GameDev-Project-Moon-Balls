@@ -223,7 +223,7 @@ Transform:
   m_GameObject: {fileID: 1100818040}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.436, y: 0.644, z: 0}
+  m_LocalPosition: {x: -0.2, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -263,7 +263,7 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.69}
+  m_Offset: {x: 0, y: 1.7}
   m_Radius: 0.3
 --- !u!212 &1100818043
 SpriteRenderer:
@@ -471,11 +471,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8460811500560778795, guid: 8c2f7e3797b2e4445879982d6f1f6160, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.9413686
+      value: 8.02
       objectReference: {fileID: 0}
     - target: {fileID: 8460811500560778795, guid: 8c2f7e3797b2e4445879982d6f1f6160, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.3382907
+      value: 4.08
       objectReference: {fileID: 0}
     - target: {fileID: 8460811500560778795, guid: 8c2f7e3797b2e4445879982d6f1f6160, type: 3}
       propertyPath: m_LocalPosition.z
@@ -960,9 +960,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8130105491992469095}
   - component: {fileID: 9211734096981124610}
-  - component: {fileID: 9223022089074980397}
   - component: {fileID: 7384557633141439068}
   - component: {fileID: 2671891121280064871}
+  - component: {fileID: 9211734096981124611}
   m_Layer: 6
   m_Name: boss(Spear)
   m_TagString: Untagged
@@ -1107,7 +1107,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &9223022089074980397
+--- !u!114 &9211734096981124611
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1116,12 +1116,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1356930759717995941}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50abff471f6674f98ac2d753e3801f6f, type: 3}
+  m_Script: {fileID: 11500000, guid: a8fff44254a316a4690451197c2540f0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::enemyScript
-  speed: 2
-  damage: 1
-  health: 3
+  m_EditorClassIdentifier: Assembly-CSharp::SpearBoss
+  speed: 3
+  tornadoSpeed: 5
+  damage: 2
+  health: 10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,14 +1,18 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpearBoss : MonoBehaviour
 {
     private Vector2 target;
+    public GameObject spear;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private bool facingRight = true;
     private bool canMove = true;
+    private bool attacking = false;
     [SerializeField] float speed;
+    [SerializeField] float tornadoSpeed;
     [SerializeField] float damage;
     [SerializeField] int health;
 
@@ -17,16 +21,32 @@ public class SpearBoss : MonoBehaviour
         damage = damage == 0 ? 1f : damage;
         speed = speed == 0 ? 0.075f : speed;
         health = health == 0 ? 1 : health;
+        tornadoSpeed = tornadoSpeed == 0 ? 5 : tornadoSpeed;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void FixedUpdate()
     {
-        if (canMove)
+        if (canMove && !attacking)
         {
             target = FindFirstObjectByType<playerScript>().transform.position;
-            Vector2 direction = (target - rb.position).normalized;
+            Vector2 direction;
+            //
+            if(Vector3.Distance(transform.position, target) > 6f)
+            {
+                direction = (target - rb.position).normalized;
+                Debug.Log("Direction: " + direction);
+            }
+            else
+            {
+                //get direction for spear
+                direction = (target - rb.position).normalized;
+                //start attack
+
+                StartCoroutine(ThrustAttack(direction));
+                direction = Vector3.zero; // may not need this
+            }
             rb.linearVelocity = direction * speed;
             if ((rb.linearVelocityX > 0 && !facingRight) || (rb.linearVelocityX < 0 && facingRight)) Flip();
         }
@@ -34,19 +54,19 @@ public class SpearBoss : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.name == "sword")
+        if (collision.collider.name == "sword" && !attacking)
         {
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1; // maybe take in a damage parameter
             StartCoroutine(FlashRed());
             if(health <= 0)
             {
-                StartCoroutine(Knockback(knockbackDirection, 20f, 0.2f));
+                StartCoroutine(Knockback(knockbackDirection, 10f, 0.2f));
                 StartCoroutine(Die());
             }
             else
             {
-                StartCoroutine(Knockback(knockbackDirection, 20f, 0.3f));
+                StartCoroutine(Knockback(knockbackDirection, 5f, 0.3f));
             }
         }
     }
@@ -90,5 +110,23 @@ public class SpearBoss : MonoBehaviour
         transform.rotation = rotate;
         yield return new WaitForSeconds(0.2f);
         Destroy(gameObject);
+    }
+
+    IEnumerator ThrustAttack(Vector2 direction)
+    {
+        //allow not to get knockback when attacking
+        Debug.Log("Beginning Thrust Attack!");
+        attacking = true;
+        //snap spear to face player
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        spear.transform.localRotation = Quaternion.Euler(0f, 0f, angle - 90f);
+        Debug.Log("angle: " + angle);
+
+        //charge logic here
+        speed += 5f;
+        rb.linearVelocity = direction * speed;
+        yield return new WaitForSeconds(2f); //balance
+        speed -= 5f;
+        attacking = false;
     }
 }
