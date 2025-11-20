@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class enemyScript : MonoBehaviour
+public class SpearBoss : MonoBehaviour
 {
     private Vector2 target;
     private Rigidbody2D rb;

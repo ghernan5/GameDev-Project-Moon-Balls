@@ -94,6 +94,18 @@ public class playerScript : MonoBehaviour
                 StartCoroutine(FlashRed());
             }
         }
+        if (collision.collider.CompareTag("SpeedUp")) // change this to a tag, build if statements for names
+        {
+            Destroy(collision.collider.gameObject);
+            Debug.Log("Player got a speedup!");
+            StartCoroutine(SpeedPowerUp(3f));
+        }
+        if (collision.collider.CompareTag("GrowUp"))
+        {
+            Destroy(collision.collider.gameObject);
+            Debug.Log("Player got a grower!");
+            StartCoroutine(GrowPowerUp(3f));
+        }
     }
 
     private void Flip()
@@ -125,6 +137,28 @@ public class playerScript : MonoBehaviour
         spriteRenderer.color = new Color(0f, -0.5f, -0.5f) + originalColor;
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = originalColor;
+    }
+
+    IEnumerator SpeedPowerUp(float duration)
+    {
+        swingSpeed += 5f;
+        speed += 5f;
+        float timer = 0f;
+        while(timer < duration)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        speed -= 5f;
+        swingSpeed -= 5f;
+    }
+
+    //This does not work properly, fix this now
+    IEnumerator GrowPowerUp(float duration)
+    {
+        sword.transform.localScale += new Vector3(0f, 1f, 0f);
+        yield return new WaitForSeconds(duration);
+        sword.transform.localScale -= new Vector3(0f, 1f, 0f);
     }
 
 

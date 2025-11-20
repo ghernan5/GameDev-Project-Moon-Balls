@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0783ad7b4c1d9314a8fad67f52e9f504
+guid: 70faf152f5025cc40bb875051c191ef7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5349927711563645478
-    second: microsaber_purple_0
+      213: -425381741869532086
+    second: spearboss_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: microsaber_purple_0
+      name: spearboss_0
       rect:
         serializedVersion: 2
-        x: 5
+        x: 0
         y: 0
-        width: 6
+        width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 62205c598e2ce3a40800000000000000
-      internalID: 5349927711563645478
+      spriteID: a4cfded3f8db81af0800000000000000
+      internalID: -425381741869532086
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: cddef9e7c11cbcc44a36d98276b4efdb
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -146,11 +146,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      microsaber_purple_0: 5349927711563645478
+      spearboss_0: -425381741869532086
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
