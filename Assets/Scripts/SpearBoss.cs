@@ -13,13 +13,11 @@ public class SpearBoss : MonoBehaviour
     private bool attacking = false;
     private bool exhausted = false;
     [SerializeField] float speed;
-    [SerializeField] float damage;
     [SerializeField] int health;
 
 
     void Start()
     {
-        damage = damage == 0 ? 1f : damage;
         speed = speed == 0 ? 0.075f : speed;
         health = health == 0 ? 1 : health;
         rb = GetComponent<Rigidbody2D>();
@@ -112,16 +110,16 @@ public class SpearBoss : MonoBehaviour
         //allow not to get knockback when attacking
         Debug.Log("Beginning Thrust Attack!");
         attacking = true;
+
         //snap spear to face player
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        if (!facingRight)
-            angle = 180f - angle;
+        if (!facingRight) angle = 180f - angle;
         spear.transform.localRotation = Quaternion.Euler(0, 0, angle - 90f);
         yield return new WaitForSeconds(0.5f); // giving player time to react
-        //charge logic here
+
         speed += 5f;
         rb.linearVelocity = direction * speed;
-        yield return new WaitForSeconds(1f); //length of charge
+        yield return new WaitForSeconds(1f); //charge length
         speed -= 5f;
         attacking = false;
         StartCoroutine(Cooldown());
@@ -133,7 +131,7 @@ public class SpearBoss : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         yield return new WaitForSeconds(1.0f);
         spear.transform.localRotation = Quaternion.Euler(0,0,0);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
         exhausted = false;
     }
 }
