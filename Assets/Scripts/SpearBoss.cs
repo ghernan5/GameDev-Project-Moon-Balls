@@ -52,19 +52,19 @@ public class SpearBoss : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.name == "sword" && (!attacking || exhausted)) // test this OR
+        if (collision.collider.CompareTag("Weapon") && (!attacking || exhausted))
         {
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1; // maybe take in a damage parameter
             StartCoroutine(FlashRed());
             if(health <= 0)
             {
-                StartCoroutine(Knockback(knockbackDirection, 10f, 0.2f));
+                StartCoroutine(Knockback(knockbackDirection, 15f, 0.2f));
                 StartCoroutine(Die());
             }
             else
             {
-                StartCoroutine(Knockback(knockbackDirection, 5f, 0.3f));
+                StartCoroutine(Knockback(knockbackDirection, 10f, 0.3f));
             }
         }
     }
@@ -94,18 +94,15 @@ public class SpearBoss : MonoBehaviour
 
     IEnumerator FlashRed()
     {
-        Color originalColor = spriteRenderer.color;
-        spriteRenderer.color = new Color(0f, -0.5f, -0.5f) + originalColor;
+        spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = originalColor;
+        spriteRenderer.color = Color.white;
     }
 
     IEnumerator Die()
     {
         Debug.Log("Dying");
-        Quaternion rotate = transform.rotation;
-        rotate.z = 90f;
-        transform.rotation = rotate;
+        transform.rotation = Quaternion.Euler(0f, 0f, 90f);
         yield return new WaitForSeconds(0.2f);
         Destroy(gameObject);
     }
@@ -134,9 +131,9 @@ public class SpearBoss : MonoBehaviour
     {
         exhausted = true;
         rb.linearVelocity = Vector2.zero;
-        Debug.Log("Cooling Down!");
-        yield return new WaitForSeconds(3f);
-        exhausted = false;
+        yield return new WaitForSeconds(1.0f);
         spear.transform.localRotation = Quaternion.Euler(0,0,0);
+        yield return new WaitForSeconds(0.5f);
+        exhausted = false;
     }
 }

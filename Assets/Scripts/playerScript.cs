@@ -77,10 +77,9 @@ public class playerScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //maybe add strength parameter to enemies to get that here (Morgan doing this)
-        if (collision.collider.CompareTag("Enemy")) // change this to tags
+        if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("Weapon"))
         {
-            health -= 1;
+            health -= 1; //
             if (health <= 0)
             {
                 print("YOU DIED");
@@ -92,6 +91,7 @@ public class playerScript : MonoBehaviour
                 Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
                 StartCoroutine(Knockback(knockbackDirection, 10f, 0.3f));
                 StartCoroutine(FlashRed());
+                
             }
         }
         if (collision.collider.CompareTag("SpeedUp")) // change this to a tag, build if statements for names
@@ -130,13 +130,12 @@ public class playerScript : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         canMove = true;
     }
-
+    
     IEnumerator FlashRed()
     {
-        Color originalColor = spriteRenderer.color;
-        spriteRenderer.color = new Color(0f, -0.5f, -0.5f) + originalColor;
+        spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = originalColor;
+        spriteRenderer.color = Color.white;
     }
 
     IEnumerator SpeedPowerUp(float duration)

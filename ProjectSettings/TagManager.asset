@@ -8,6 +8,7 @@ TagManager:
   - SpeedUp
   - Enemy
   - Boss
+  - Weapon
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - Water
   - UI
   - Enemy
-  - 
+  - Pickup
   - 
   - 
   - 
