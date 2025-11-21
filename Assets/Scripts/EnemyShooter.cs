@@ -26,7 +26,7 @@ public class enemyShooter : MonoBehaviour
         if (canMove)
         {
             target = FindFirstObjectByType<playerScript>().transform.position;
-            Vector2 direction = (target - rb.position).normalized;
+            Vector2 direction;
             //keep a distance away from the player
             if(Vector3.Distance(transform.position, target) < 5f )
             {

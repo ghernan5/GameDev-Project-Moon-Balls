@@ -1,16 +1,21 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpearBoss : MonoBehaviour
 {
     private Vector2 target;
+    public GameObject spear;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private bool facingRight = true;
     private bool canMove = true;
+    private bool attacking = false;
+    private bool exhausted = false;
     [SerializeField] float speed;
     [SerializeField] float damage;
     [SerializeField] int health;
+
 
     void Start()
     {
@@ -23,10 +28,23 @@ public class SpearBoss : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (canMove)
+        if (canMove && !attacking && !exhausted)
         {
             target = FindFirstObjectByType<playerScript>().transform.position;
-            Vector2 direction = (target - rb.position).normalized;
+            Vector2 direction;
+            //
+            if(Vector3.Distance(transform.position, target) > 4f)
+            {
+                direction = (target - rb.position).normalized;
+                Debug.Log("Direction: " + direction);
+            }
+            else
+            {
+                //get direction for spear and attack
+                direction = (target - rb.position).normalized;
+                StartCoroutine(ThrustAttack(direction));
+                direction = Vector3.zero; // may not need this
+            }
             rb.linearVelocity = direction * speed;
             if ((rb.linearVelocityX > 0 && !facingRight) || (rb.linearVelocityX < 0 && facingRight)) Flip();
         }
@@ -34,19 +52,19 @@ public class SpearBoss : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.name == "sword")
+        if (collision.collider.CompareTag("Weapon") && (!attacking || exhausted))
         {
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1; // maybe take in a damage parameter
             StartCoroutine(FlashRed());
             if(health <= 0)
             {
-                StartCoroutine(Knockback(knockbackDirection, 20f, 0.2f));
+                StartCoroutine(Knockback(knockbackDirection, 15f, 0.2f));
                 StartCoroutine(Die());
             }
             else
             {
-                StartCoroutine(Knockback(knockbackDirection, 20f, 0.3f));
+                StartCoroutine(Knockback(knockbackDirection, 10f, 0.3f));
             }
         }
     }
@@ -76,19 +94,46 @@ public class SpearBoss : MonoBehaviour
 
     IEnumerator FlashRed()
     {
-        Color originalColor = spriteRenderer.color;
-        spriteRenderer.color = new Color(0f, -0.5f, -0.5f) + originalColor;
+        spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = originalColor;
+        spriteRenderer.color = Color.white;
     }
 
     IEnumerator Die()
     {
         Debug.Log("Dying");
-        Quaternion rotate = transform.rotation;
-        rotate.z = 90f;
-        transform.rotation = rotate;
+        transform.rotation = Quaternion.Euler(0f, 0f, 90f);
         yield return new WaitForSeconds(0.2f);
         Destroy(gameObject);
+    }
+
+    IEnumerator ThrustAttack(Vector2 direction)
+    {
+        //allow not to get knockback when attacking
+        Debug.Log("Beginning Thrust Attack!");
+        attacking = true;
+        //snap spear to face player
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        if (!facingRight)
+            angle = 180f - angle;
+        spear.transform.localRotation = Quaternion.Euler(0, 0, angle - 90f);
+        yield return new WaitForSeconds(0.5f); // giving player time to react
+        //charge logic here
+        speed += 5f;
+        rb.linearVelocity = direction * speed;
+        yield return new WaitForSeconds(1f); //length of charge
+        speed -= 5f;
+        attacking = false;
+        StartCoroutine(Cooldown());
+    }
+
+    IEnumerator Cooldown()
+    {
+        exhausted = true;
+        rb.linearVelocity = Vector2.zero;
+        yield return new WaitForSeconds(1.0f);
+        spear.transform.localRotation = Quaternion.Euler(0,0,0);
+        yield return new WaitForSeconds(0.5f);
+        exhausted = false;
     }
 }
