@@ -78,7 +78,7 @@ public class playerScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.name.Contains("enemy") && !isSwinging)
+        if ((collision.collider.name.Contains("enemy") || collision.collider.name.Contains("bulet")) && !isSwinging)
         {
             if (health <= 0)
             {

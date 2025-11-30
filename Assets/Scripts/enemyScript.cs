@@ -13,7 +13,7 @@ public class enemyScript : MonoBehaviour
     void Start()
     {
         damage = damage == 0 ? 1f : damage;
-        speed = speed == 0 ? 0.075f : speed;
+        //speed = speed == 0 ? 0.075f : speed;
         rb = GetComponent<Rigidbody2D>();
     }
 
