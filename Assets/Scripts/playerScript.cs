@@ -98,13 +98,13 @@ public class playerScript : MonoBehaviour
         {
             Destroy(collision.collider.gameObject);
             Debug.Log("Player got a speedup!");
-            StartCoroutine(SpeedPowerUp(3f));
+            StartCoroutine(SpeedPowerUp(5f));
         }
         if (collision.collider.CompareTag("GrowUp"))
         {
             Destroy(collision.collider.gameObject);
             Debug.Log("Player got a grower!");
-            StartCoroutine(GrowPowerUp(3f));
+            StartCoroutine(GrowPowerUp(5f));
         }
     }
 

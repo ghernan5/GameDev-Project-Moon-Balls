@@ -34,7 +34,7 @@ public class enemyScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.name == "sword")
+        if (collision.collider.CompareTag("Weapon"))
         {
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1; // maybe take in a damage parameter
