@@ -6,16 +6,14 @@ public class enemyScript : MonoBehaviour
     private Vector2 target;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
-    private bool facingRight = true;
-    private bool canMove = true;
-    [SerializeField] float speed;
-    [SerializeField] float damage;
+    private bool facingRight,canMove = true;
+    [SerializeField] float speed,damage;
     [SerializeField] int health;
 
     void Start()
     {
         damage = damage == 0 ? 1f : damage;
-        speed = speed == 0 ? 0.075f : speed;
+        speed = speed == 0 ? 0.5f : speed;
         health = health == 0 ? 1 : health;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();

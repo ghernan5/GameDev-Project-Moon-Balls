@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 1815429}
   m_Layer: 0
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -180,8 +180,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   speed: 5
+  health: 3
   sword: {fileID: 23392719}
-  swingSpeed: 1
+  swingSpeed: 10
   swingAngle: 90
 --- !u!114 &1815426
 MonoBehaviour:
@@ -317,7 +318,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -357,7 +358,7 @@ GameObject:
   - component: {fileID: 23392720}
   m_Layer: 0
   m_Name: sword
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -392,7 +393,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -400,7 +401,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.5, y: 1}
+    oldSize: {x: 0.375, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -496,7 +497,7 @@ GameObject:
   - component: {fileID: 492330527}
   m_Layer: 7
   m_Name: enemy (1)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -580,8 +581,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50abff471f6674f98ac2d753e3801f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyScript
-  facingRight: 1
   speed: 0
+  damage: 0
+  health: 0
 --- !u!212 &492330525
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -834,7 +836,7 @@ GameObject:
   - component: {fileID: 1478604339}
   m_Layer: 7
   m_Name: enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -918,8 +920,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50abff471f6674f98ac2d753e3801f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyScript
-  facingRight: 1
   speed: 0
+  damage: 0
+  health: 0
 --- !u!212 &1478604337
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1035,7 +1038,7 @@ GameObject:
   - component: {fileID: 1498563673}
   m_Layer: 7
   m_Name: enemy (fast)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1119,8 +1122,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50abff471f6674f98ac2d753e3801f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyScript
-  facingRight: 1
   speed: 0.1
+  damage: 0
+  health: 0
 --- !u!212 &1498563671
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1237,7 +1241,7 @@ GameObject:
   - component: {fileID: 2054129981}
   m_Layer: 7
   m_Name: enemy(shooter)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1272,7 +1276,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1321,8 +1325,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50abff471f6674f98ac2d753e3801f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyScript
-  facingRight: 1
   speed: 0
+  damage: 0
+  health: 0
 --- !u!212 &2054129978
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1443,8 +1448,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 741557856}
-  - {fileID: 1815428}
   - {fileID: 1478604338}
   - {fileID: 492330526}
   - {fileID: 1498563672}
   - {fileID: 2054129979}
+  - {fileID: 1815428}

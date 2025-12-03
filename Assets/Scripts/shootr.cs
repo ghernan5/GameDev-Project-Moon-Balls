@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class shootr : MonoBehaviour
 {
-    public GameObject bulletPrefab;
-    public GameObject target;
-    public GameObject spawnLocation;
+    public GameObject bulletPrefab,target,spawnLocation;
 
     void Start()
     {

@@ -6,10 +6,8 @@ public class enemyShooter : MonoBehaviour
     private Vector2 target;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
-    private bool facingRight = true;
-    private bool canMove = true;
-    [SerializeField] float speed;
-    [SerializeField] float damage;
+    private bool facingRight = true,canMove = true;
+    [SerializeField] float speed,damage;
     [SerializeField] int health;
 
     void Start()

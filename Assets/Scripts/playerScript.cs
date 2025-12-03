@@ -8,11 +8,8 @@ public class playerScript : MonoBehaviour
     public float speed;
     [SerializeField] int health = 3;
     public GameObject sword;
-    [SerializeField] private float swingSpeed = 10f;
-    [SerializeField] private float swingAngle = 90f;
-    private bool isSwinging = false;
-    private bool facingRight = true;
-    private bool canMove = true;
+    [SerializeField] private float swingSpeed = 10f,swingAngle = 90f;
+    private bool isSwinging = false,facingRight = true,canMove = true;
     private SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
     private Quaternion startingSwordRotation;
@@ -75,11 +72,26 @@ public class playerScript : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public void HitByBullet()
     {
-        if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("Weapon"))
+        health -= 1;
+        if (health <= 0)
         {
-            health -= 1; //
+            print("YOU DIED");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        else
+        {
+            print(health);
+            StartCoroutine(FlashRed());
+        } 
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy") || collision.CompareTag("Weapon"))
+        {
+            health -= 1;
             if (health <= 0)
             {
                 print("YOU DIED");
@@ -91,18 +103,17 @@ public class playerScript : MonoBehaviour
                 Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
                 StartCoroutine(Knockback(knockbackDirection, 10f, 0.3f));
                 StartCoroutine(FlashRed());
-                
             }
         }
-        if (collision.collider.CompareTag("SpeedUp")) // change this to a tag, build if statements for names
+        if (collision.CompareTag("SpeedUp")) // change this to a tag, build if statements for names
         {
-            Destroy(collision.collider.gameObject);
+            Destroy(collision.gameObject);
             Debug.Log("Player got a speedup!");
             StartCoroutine(SpeedPowerUp(3f));
         }
-        if (collision.collider.CompareTag("GrowUp"))
+        if (collision.CompareTag("GrowUp"))
         {
-            Destroy(collision.collider.gameObject);
+            Destroy(collision.gameObject);
             Debug.Log("Player got a grower!");
             StartCoroutine(GrowPowerUp(3f));
         }
