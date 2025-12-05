@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +9,7 @@ public class playerScript : MonoBehaviour
     public float speed;
     [SerializeField] int health = 3;
     public GameObject sword;
+    public Image healthbar;
     [SerializeField] private float swingSpeed = 10f,swingAngle = 90f;
     private bool isSwinging = false,facingRight = true,canMove = true;
     private SpriteRenderer spriteRenderer;
@@ -28,6 +30,7 @@ public class playerScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        healthbar.rectTransform.sizeDelta = new Vector2(health/3f*2.5f, 0.25f);
         if (isSwinging)
         {
             //stop player from moving while hit
