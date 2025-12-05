@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Boss
   - Weapon
+  - HealthUp
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,6 @@ TagManager:
   - Bullet
   - Enemy
   - Pickup
-  - 
   - 
   - 
   - 

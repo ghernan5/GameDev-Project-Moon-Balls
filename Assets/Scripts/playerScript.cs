@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -105,6 +106,16 @@ public class playerScript : MonoBehaviour
             Destroy(collision.collider.gameObject);
             Debug.Log("Player got a grower!");
             StartCoroutine(GrowPowerUp(5f));
+        }
+        if (collision.collider.CompareTag("HealthUp"))
+        {
+            Destroy(collision.collider.gameObject);
+            Debug.Log("Player got aid!");
+            if(health < 5)
+            {
+                health++;
+            }
+            Debug.Log("Health already Full!");
         }
     }
 
