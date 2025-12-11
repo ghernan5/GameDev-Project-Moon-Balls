@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    private Dictionary<string, GameObject> loadedCells = new Dictionary<string, GameObject>();
 
     public GameObject Player;
     public GameObject currentCell;
@@ -17,7 +19,6 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         LoadCell(xCoord, yCoord);
@@ -35,23 +36,32 @@ public class GameManager : MonoBehaviour
     private void LoadCell(int x, int y)
     {
         if (currentCell != null)
-            Destroy(currentCell);
+            currentCell.SetActive(false);
 
-        string newCell = $"{x}_{y}";
+        string key = $"{x}_{y}";
 
-        GameObject prefab = Resources.Load<GameObject>($"Cells/{newCell}");
+        if (loadedCells.TryGetValue(key, out GameObject savedCell))
+        {
+            Debug.Log("Reusing saved cell");
+            currentCell = savedCell;
+            currentCell.SetActive(true);
+            currentMarkers = currentCell.GetComponentsInChildren<MapMarker>();
+            return;
+        }
 
+        Debug.Log("Generating a new cell");
+        GameObject prefab = Resources.Load<GameObject>($"Cells/{key}");
         if (prefab == null)
         {
-            Debug.LogError($"Missing cell prefab: {newCell}");
+            Debug.LogError($"Missing cell prefab: {key}");
             return;
         }
 
         currentCell = Instantiate(prefab);
-
-        // Cache markers
+        loadedCells[key] = currentCell;
         currentMarkers = currentCell.GetComponentsInChildren<MapMarker>();
     }
+
 
     public void UpdateCell(string direction)
     {
@@ -68,9 +78,10 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log("Coordinates: " + xCoord + ", " + yCoord);
 
+        StoreCellState(); //will stay as a prefab in world
+        
         LoadCell(xCoord, yCoord);
 
-            // Determine the entry object name (opposite of direction moved)
         string entryName = direction switch
         {
             "North" => "SouthEntry",
@@ -85,6 +96,13 @@ public class GameManager : MonoBehaviour
             Player.transform.position = entryPoint.position;
         else
             Player.transform.position = Vector3.zero;
+    }
+
+    void StoreCellState()
+    {
+        //deactivate cell and store it
+        currentCell.SetActive(false);
+        
     }
 
 }
