@@ -6,7 +6,7 @@ public class buletScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position+=transform.up * 7 * Time.deltaTime;
+        transform.position+=transform.up * 5 * Time.deltaTime;
     }
     void OnBecameInvisible()
     {
@@ -17,11 +17,11 @@ public class buletScript : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
-        Gizmos.DrawLine(transform.position, transform.up*7);
+        Gizmos.DrawLine(transform.position, transform.up*5);
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.name.Contains("player")) Destroy(gameObject);
+        if (collision.collider.CompareTag("Weapon")) Destroy(gameObject);
     }
 }

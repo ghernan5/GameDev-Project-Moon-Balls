@@ -78,8 +78,12 @@ public class playerScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("Weapon"))
+        if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("Weapon") || collision.collider.CompareTag("Bullet"))
         {
+            //destroy bullet
+            if (collision.collider.CompareTag("Bullet")){
+                Destroy(collision.gameObject);
+            }
             health -= 1; //
             if (health <= 0)
             {

@@ -34,8 +34,12 @@ public class enemyScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Weapon"))
+        if (collision.collider.CompareTag("Weapon") || collision.collider.CompareTag("Bullet"))
         {
+            if (collision.collider.CompareTag("Bullet")){
+                Debug.Log("Bullet being Destroyed!");
+                Destroy(collision.gameObject);
+            }
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1; // maybe take in a damage parameter
             StartCoroutine(FlashRed());

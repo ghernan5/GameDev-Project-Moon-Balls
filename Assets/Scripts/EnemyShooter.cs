@@ -27,18 +27,16 @@ public class enemyShooter : MonoBehaviour
         {
             target = FindFirstObjectByType<playerScript>().transform.position;
             Vector2 direction;
-            //keep a distance away from the player
-            if(Vector3.Distance(transform.position, target) < 5f )
+            if(Vector3.Distance(transform.position, target) < 3f )
             {
                 direction = (target + rb.position).normalized;
             }
-            else if(Vector3.Distance(transform.position, target) > 6f)
+            else if(Vector3.Distance(transform.position, target) > 4f)
             {
                 direction = (target - rb.position).normalized;
             }
             else
             {
-                //remain still
                 direction = Vector3.zero;
             }
             rb.linearVelocity = direction * speed;
@@ -48,18 +46,19 @@ public class enemyShooter : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.name == "sword")
+        if (collision.collider.CompareTag("Weapon"))
         {
+            Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1;
+            StartCoroutine(FlashRed());
             if(health <= 0)
             {
-                Destroy(gameObject);
+                StartCoroutine(Knockback(knockbackDirection, 20f, 0.2f));
+                StartCoroutine(Die());
             }
             else
             {
-                Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
-                StartCoroutine(Knockback(knockbackDirection, 20f, 0.3f));
-                StartCoroutine(FlashRed());
+                StartCoroutine(Knockback(knockbackDirection, 20f, 0.2f));
             }
         }
     }
@@ -89,11 +88,16 @@ public class enemyShooter : MonoBehaviour
 
     IEnumerator FlashRed()
     {
-        Color originalColor = spriteRenderer.color;
-        spriteRenderer.color = new Color(0f, -0.5f, -0.5f) + originalColor;
+        spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = originalColor;
+        spriteRenderer.color = Color.white;
     }
-
-    //to do: enemy needs a bullet
+    IEnumerator Die()
+    {
+        Debug.Log("Dying");
+        transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+        yield return new WaitForSeconds(0.2f);
+        Destroy(gameObject);
+    }
 }
+
