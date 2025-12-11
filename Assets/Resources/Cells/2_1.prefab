@@ -2145,7 +2145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e749367c7741c9540aeba59d365e16eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  direction: South
+  direction: North
   newLocation: {fileID: 0}
 --- !u!1 &6086767326063019318
 GameObject:
@@ -2584,7 +2584,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileSpriteIndex: 10
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2764,7 +2764,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileSpriteIndex: 9
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2867,10 +2867,10 @@ Tilemap:
   m_TileSpriteArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 1
-    m_Data: {fileID: -1140656965, guid: af0f24477dec1442083a70d6be79e4d6, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: 208336215595847010, guid: af0f24477dec1442083a70d6be79e4d6, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 2
     m_Data: {fileID: -991750240, guid: af0f24477dec1442083a70d6be79e4d6, type: 3}
   - m_RefCount: 8
@@ -2883,10 +2883,10 @@ Tilemap:
     m_Data: {fileID: -1786019533, guid: af0f24477dec1442083a70d6be79e4d6, type: 3}
   - m_RefCount: 4
     m_Data: {fileID: 202829715, guid: af0f24477dec1442083a70d6be79e4d6, type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: -1140656965, guid: af0f24477dec1442083a70d6be79e4d6, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 208336215595847010, guid: af0f24477dec1442083a70d6be79e4d6, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 48
     m_Data:
