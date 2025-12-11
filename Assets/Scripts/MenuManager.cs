@@ -17,7 +17,7 @@ public class MenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("StartCell");
+        SceneManager.LoadScene("MainGame");
     }
 
     public void ExitGame(){
