@@ -19,16 +19,25 @@ public class playerScript : MonoBehaviour
     private Quaternion startingSwordRotation;
     private Vector3 startingSwordPosition;
     private Vector2 movement;
+    private AudioSource audioSource;
+    public AudioClip swingSound;
+    public AudioClip getHitSound;
     float rotated = 0f;
     float swingDirection;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
 
         sword.SetActive(false);
     }
+
+void OnEscape(InputValue value)
+{
+    SceneManager.LoadScene("MainMenu");
+}
 
     void FixedUpdate()
     {
@@ -69,6 +78,7 @@ public class playerScript : MonoBehaviour
     {
         if (!isSwinging)
         {
+            audioSource.PlayOneShot(swingSound);
             startingSwordRotation = sword.transform.localRotation;
             startingSwordPosition = sword.transform.localPosition;
             isSwinging = true;
@@ -84,6 +94,7 @@ public class playerScript : MonoBehaviour
             if (collision.collider.CompareTag("Bullet")){
                 Destroy(collision.gameObject);
             }
+            audioSource.PlayOneShot(getHitSound);
             health -= 1; //
             if (health <= 0)
             {
@@ -117,9 +128,9 @@ public class playerScript : MonoBehaviour
             Debug.Log("Player got aid!");
             if(health < 5)
             {
+                Debug.Log("Health: " + health);
                 health++;
             }
-            Debug.Log("Health already Full!");
         }
     }
 

@@ -6,6 +6,8 @@ public class enemyScript : MonoBehaviour
     private Vector2 target;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
+    public AudioClip hitSound;
     private bool facingRight = true;
     private bool canMove = true;
     [SerializeField] float speed;
@@ -18,6 +20,7 @@ public class enemyScript : MonoBehaviour
         speed = speed == 0 ? 0.075f : speed;
         health = health == 0 ? 1 : health;
         rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -40,6 +43,7 @@ public class enemyScript : MonoBehaviour
                 Debug.Log("Bullet being Destroyed!");
                 Destroy(collision.gameObject);
             }
+            audioSource.PlayOneShot(hitSound);
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1; // maybe take in a damage parameter
             StartCoroutine(FlashRed());

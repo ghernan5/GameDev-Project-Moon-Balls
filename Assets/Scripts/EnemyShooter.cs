@@ -6,6 +6,8 @@ public class enemyShooter : MonoBehaviour
     private Vector2 target;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
+    public AudioClip hitSound;
     private bool facingRight = true;
     private bool canMove = true;
     [SerializeField] float speed;
@@ -19,6 +21,7 @@ public class enemyShooter : MonoBehaviour
         health = health == 0 ? 1 : health;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void FixedUpdate()
@@ -50,6 +53,7 @@ public class enemyShooter : MonoBehaviour
         {
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1;
+            audioSource.PlayOneShot(hitSound);
             StartCoroutine(FlashRed());
             if(health <= 0)
             {

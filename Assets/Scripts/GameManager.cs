@@ -39,6 +39,13 @@ public class GameManager : MonoBehaviour
             currentCell.SetActive(false);
 
         string key = $"{x}_{y}";
+        //remove all bulletobjects named bulet(clone) when scene changes
+        GameObject[] bulletObjects = GameObject.FindGameObjectsWithTag("Bullet");
+        foreach (var bulletObject in bulletObjects)
+        {
+            Destroy(bulletObject);
+        }
+        
 
         if (loadedCells.TryGetValue(key, out GameObject savedCell))
         {

@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpearBoss : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class SpearBoss : MonoBehaviour
     public GameObject spear;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
+    public GameObject winScreen;
+    private AudioSource audioSource;
+    public AudioClip attackSound;
+    public AudioClip deathSound;
+    public AudioClip hitSound;
     private bool facingRight = true;
     private bool canMove = true;
     private bool attacking = false;
@@ -22,7 +28,9 @@ public class SpearBoss : MonoBehaviour
         health = health == 0 ? 1 : health;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
+
 
     void FixedUpdate()
     {
@@ -54,6 +62,7 @@ public class SpearBoss : MonoBehaviour
         {
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             health -= 1; // maybe take in a damage parameter
+            audioSource.PlayOneShot(hitSound);
             StartCoroutine(FlashRed());
             if(health <= 0)
             {
@@ -99,10 +108,13 @@ public class SpearBoss : MonoBehaviour
 
     IEnumerator Die()
     {
+        
         Debug.Log("Dying");
+        audioSource.PlayOneShot(deathSound);
         transform.rotation = Quaternion.Euler(0f, 0f, 90f);
         yield return new WaitForSeconds(0.2f);
-        Destroy(gameObject);
+        winScreen.SetActive(true);
+        
     }
 
     IEnumerator ThrustAttack(Vector2 direction)
@@ -110,6 +122,7 @@ public class SpearBoss : MonoBehaviour
         //allow not to get knockback when attacking
         Debug.Log("Beginning Thrust Attack!");
         attacking = true;
+        audioSource.PlayOneShot(attackSound);
 
         //snap spear to face player
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
